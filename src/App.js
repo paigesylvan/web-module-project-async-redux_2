@@ -1,18 +1,26 @@
 import React from 'react';
 import './App.css';
+import { useEffect } from 'react';
+import { getDogs} from './actions';
+import DogList from './components/dogList';
+import axios from 'axios';
+import { connect } from 'react-redux'
 
 function App(props) {
 
-  const { loading, error} = props;
+  const { loading, error, getDogs} = props;
 
-  if (error !== "") {
-    return <h3>{error}</h3>
-  }
+  useEffect(() => {
+   getDogs();
+  }, [])
 
   return (
     <div className="App">
       <h1> Dog Photo </h1>
 
+      {
+        (error !== "") && <h3>{error}</h3>
+      }
       {
         loading ? <h3> We Are Loading </h3> : <DogList/>
       }
@@ -28,4 +36,4 @@ const mapStateToProps = state => {
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { getDogs })(App);
